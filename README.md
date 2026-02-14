@@ -5,6 +5,8 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 [![Zerodha](https://img.shields.io/badge/Zerodha-Kite%20API-orange.svg)](https://kite.trade/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Skills.sh](https://img.shields.io/badge/skills.sh-install-blue)](https://skills.sh/javajack/skill-algotrader)
+[![GitHub](https://img.shields.io/github/stars/javajack/skill-algotrader?style=social)](https://github.com/javajack/skill-algotrader)
 
 ## Overview
 
@@ -16,6 +18,49 @@ AlgoTrader is a Claude Code skill that provides expert guidance for building, op
 - ✅ **Production failure prevention** (30+ gotchas documented)
 - ✅ **Backtest-live parity** validation
 - ✅ **Risk-adjusted capital compounding**
+
+## Installation
+
+### Quick Install (Recommended)
+
+Install directly from the skills.sh directory:
+
+```bash
+npx skills add javajack/skill-algotrader
+```
+
+### Manual Installation
+
+#### Option 1: Clone to Claude Skills Directory
+```bash
+cd ~/.claude/skills
+git clone https://github.com/javajack/skill-algotrader.git algotrader
+cd algotrader
+./start.sh wizard  # Start using the skill
+```
+
+#### Option 2: Custom Skills Path
+```bash
+export CLAUDE_SKILLS_PATH=~/work/skills
+cd ~/work/skills
+git clone https://github.com/javajack/skill-algotrader.git algotrader
+cd algotrader
+./start.sh wizard
+```
+
+### Install Python Dependencies
+
+After installation, set up the Python environment:
+
+```bash
+cd ~/.claude/skills/algotrader  # or your custom path
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Or use the convenience script (auto-creates venv)
+./start.sh wizard
+```
 
 ## Features
 
@@ -118,34 +163,13 @@ Impact: #1 cause of backtest-live parity violations
 
 See [NUANCES.md](NUANCES.md) for all 30+ gotchas.
 
-## Installation
+## Configuration
 
-### 1. Install as Claude Code Skill
+### Configure Zerodha API Credentials
 
-```bash
-# Clone or copy to Claude Code skills directory
-cp -r algotrader ~/.claude/skills/
-
-# Or use custom location
-export CLAUDE_SKILLS_PATH=~/work/skills
-```
-
-### 2. Install Python Dependencies
+For live trading, create a `.env` file in your bot directory:
 
 ```bash
-cd ~/work/skills/algotrader
-pip install -r requirements.txt
-```
-
-Required packages:
-- `polars` - Fast dataframe operations (5-10x faster than Pandas)
-- `kiteconnect` - Zerodha Kite API client
-- `requests` - HTTP client for fetching index data
-- `beautifulsoup4` - HTML parsing for NSE data
-
-### 3. Configure Zerodha API Credentials
-
-```python
 # Create .env file (never commit this!)
 cat > .env << EOF
 KITE_API_KEY=your_api_key
@@ -155,6 +179,8 @@ EOF
 ```
 
 Get credentials from: https://kite.trade/
+
+**Note:** The `.env` file is automatically excluded from git via `.gitignore`. Never commit API credentials!
 
 ## Quick Start
 
