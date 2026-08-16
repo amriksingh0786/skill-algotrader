@@ -42,3 +42,13 @@ trading_bot_*/
 # OS
 .DS_Store
 Thumbs.db
+
+# Broker credentials — .kite_session.json holds a bearer token for a funded
+# account. Never commit it.
+.kite_session.json
+.env.local
+
+# Engine working directories
+.cache/
+state/
+backtests/

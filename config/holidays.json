@@ -1,0 +1,4 @@
+{
+  "_readme": "NSE trading holidays, ISO dates. Weekends are handled automatically and do not belong here. NSE publishes the list annually at nseindia.com/resources/exchange-communication-holidays — there is no stable API, so this file must be maintained by hand each January. An empty or stale list is not dangerous: the bot simply starts on a holiday, finds no data, and idles. It never causes a wrong trade.",
+  "holidays": []
+}

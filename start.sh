@@ -4,7 +4,15 @@
 
 set -e  # Exit on error
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Resolve symlinks so SCRIPT_DIR is the real repo, not the install location
+# (see the same note in run.sh).
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    LINK_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$( readlink "$SOURCE" )"
+    [[ $SOURCE != /* ]] && SOURCE="$LINK_DIR/$SOURCE"
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 VENV_PYTHON="$SCRIPT_DIR/venv/bin/python"
 VENV_PIP="$SCRIPT_DIR/venv/bin/pip"
 
@@ -155,24 +163,31 @@ main() {
         print_msg "$YELLOW" "AlgoTrader Startup System"
         echo ""
         echo "Usage:"
-        echo "  ./start.sh                           Run AlgoTrader CLI (interactive)"
-        echo "  ./start.sh <bot_dir>                 Start trading bot in paper mode"
-        echo "  ./start.sh <bot_dir> --mode live     Start trading bot in live mode"
-        echo "  ./start.sh wizard                    Run bot generation wizard"
-        echo "  ./start.sh universe                  Fetch universe data"
-        echo "  ./start.sh help                      Show help"
+        echo "  ./start.sh <bot_dir>                 Start a generated bot in paper mode"
+        echo "  ./start.sh <bot_dir> --mode live     Start a generated bot in live mode"
         echo ""
-        echo "Examples:"
-        echo "  ./start.sh wizard"
+        echo "Skill commands (all forwarded to algotrader.py):"
+        echo "  ./start.sh wizard                    Generate a new bot"
         echo "  ./start.sh universe --indices nifty50"
-        echo "  ./start.sh trading_bot_20260214_143000"
-        echo "  ./start.sh trading_bot_20260214_143000 --mode live"
+        echo "  ./start.sh login                     Zerodha auth (daily)"
+        echo "  ./start.sh token <request_token>     Finish Zerodha auth"
+        echo "  ./start.sh warm --days 90            Pre-download history"
+        echo "  ./start.sh backtest --start 2026-01-01"
+        echo "  ./start.sh run --mode paper          Paper trade"
+        echo "  ./start.sh report                    Post-trade analytics"
+        echo "  ./start.sh check <path>              Scan code for failure patterns"
+        echo ""
+        echo "First run order: login -> token -> universe -> warm -> backtest -> paper"
         echo ""
         exit 0
     fi
 
     # List of known AlgoTrader commands (not bot directories)
-    local known_commands=("wizard" "universe" "signal" "check" "optimize" "help" "--help" "-h")
+    # Keep in sync with the subparsers in algotrader.py and the commands in
+    # skill.json. A command missing here is treated as a bot directory and fails
+    # with a confusing "directory not found".
+    local known_commands=("wizard" "universe" "login" "token" "warm" "backtest" \
+                          "run" "report" "check" "help" "--help" "-h")
 
     # Check if first argument is a known command
     local is_command=false

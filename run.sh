@@ -1,7 +1,16 @@
 #!/bin/bash
 # Convenience wrapper to run algotrader with virtual environment
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Resolve symlinks so SCRIPT_DIR is the real repo, not the install location.
+# The skill is normally installed as symlinks under ~/.claude/skills/algotrader;
+# without this, invoking the symlinked run.sh builds a second 275MB venv there.
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    LINK_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$( readlink "$SOURCE" )"
+    [[ $SOURCE != /* ]] && SOURCE="$LINK_DIR/$SOURCE"
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 VENV_PYTHON="$SCRIPT_DIR/venv/bin/python"
 
 # Check if venv exists

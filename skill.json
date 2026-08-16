@@ -1,33 +1,35 @@
 {
   "name": "algotrader",
-  "version": "1.0.0",
-  "description": "Comprehensive quantitative trading expert for Indian equity markets with Zerodha integration, backtesting, live trading, signal generation, and risk management",
+  "version": "2.0.0",
+  "description": "Quantitative trading engine and expert for Indian equity markets: Zerodha Kite integration, backtesting with backtest/live parity, paper and live execution, risk management, and post-trade analytics",
   "author": "Trading Systems Lab",
   "invocation": "/algotrader",
+  "note": "Claude Code discovers this skill via SKILL.md, not this file. skill.json is kept for the skills.sh directory listing; keep the command list in sync with algotrader.py's subparsers and start.sh's known_commands array.",
   "capabilities": [
-    "Interactive trading bot generation wizard",
-    "Universe curation (Nifty 50/100/Midcap/Smallcap from live data)",
-    "Signal generation with multi-factor confirmation",
-    "Zerodha API integration and error handling",
-    "Backtest vs live mode parity",
-    "Position reconciliation and stop loss lifecycle",
-    "Performance optimization (Parquet caching, vectorization)",
-    "Post-trade analytics and signal attribution",
-    "Exit strategies (intraday and positional)",
-    "Risk-adjusted returns with Kelly Criterion",
-    "Market regime detection and position sizing",
-    "Production failure pattern recognition",
-    "Indian market timing and circuit breaker handling"
+    "Live index constituent fetching from NSE archives",
+    "Parquet-cached historical data with quality validation",
+    "Vectorised indicators (Polars): RSI, ADX, ATR, EMA, session-anchored VWAP",
+    "Pure-function signal generation with factor attribution",
+    "Event-driven backtest sharing the live code path",
+    "Paper trading with realistic fill, slippage and cost modelling",
+    "Live execution with place-then-cancel stop-loss lifecycle",
+    "Startup position reconciliation against the broker",
+    "Risk limits: per-trade risk, portfolio heat, loss streaks, daily stop, cooldowns",
+    "Market regime detection and position size scaling",
+    "Post-trade analytics, signal attribution and parity diagnostics",
+    "Static analysis of trading code against 30 documented failure patterns"
   ],
   "commands": {
-    "": "Interactive wizard to generate trading bot or analyze existing code",
-    "wizard": "Launch bot generation wizard",
-    "universe": "Fetch and create universe JSON files from live index data",
-    "signal <symbol>": "Generate entry signal for a symbol",
-    "backtest": "Run backtest comparison tool",
-    "check": "Analyze existing trading code for issues",
-    "fix <issue>": "Fix common production issues",
-    "optimize <file>": "Optimize code for performance"
+    "": "Interactive wizard to generate a trading bot",
+    "wizard": "Generate a new bot (config + engine + universe)",
+    "universe": "Fetch index constituents from NSE",
+    "login": "Print the Zerodha Kite login URL",
+    "token <request_token>": "Exchange a request token for a daily access token",
+    "warm": "Pre-download historical data into the Parquet cache",
+    "backtest": "Simulate a strategy on historical data",
+    "run": "Trade in paper or live mode",
+    "report": "Post-trade analytics and signal attribution",
+    "check <path>": "Scan trading code for known failure patterns"
   },
   "knowledge_domains": [
     "zerodha_integration",
@@ -53,7 +55,8 @@
       "polars",
       "kiteconnect",
       "requests",
-      "beautifulsoup4"
-    ]
+      "python-dotenv"
+    ],
+    "broker": "Zerodha Kite Connect subscription (historical data and live quotes require the paid Connect plan, not Personal)"
   }
 }
